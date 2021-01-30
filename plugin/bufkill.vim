@@ -354,25 +354,27 @@ function! <SID>BufKill(cmd, bang) "{{{1
   endwhile
   call s:Debug(2, DebugF, 's:BufKillWindowListWithBufferLoaded')
 
+  " NOTE: Commenting out to turn off prompt.
+  " TODO: Implement a variable.
   " Handle the case where the buffer is displayed in multiple windows
-  if len(s:BufKillWindowListWithBufferLoaded) > 1 && strlen(a:bang) == 0
-    if g:BufKillActionWhenBufferDisplayedInAnotherWindow =~ '[Cc][Aa][Nn][Cc][Ee][Ll]'
-      if g:BufKillVerbose
-        echom "Buffer '" . bufname(s:BufKillBufferToKill) . "' displayed in multiple windows - " . a:cmd . " cancelled (add ! to kill anywawy, or set g:BufKillActionWhenBufferDisplayedInAnotherWindow to 'confirm' or 'kill')"
-      endif
-      return
-    elseif g:BufKillActionWhenBufferDisplayedInAnotherWindow =~ '[Cc][Oo][Nn][Ff][Ii][Rr][Mm]'
-      let choice = confirm("Buffer '" . bufname(s:BufKillBufferToKill) . "' displayed in multiple windows - " . a:cmd . " it anyway?", "&Yes\n&No", 1)
-      if choice != 1
-        return
-      endif
-    elseif g:BufKillActionWhenBufferDisplayedInAnotherWindow =~ '[Rr][Ee][Mm][Oo][Vv][Ee]'
-      if g:BufKillVerbose
-        echom "Buffer '" . bufname(s:BufKillBufferToKill) . "' displayed in multiple windows - executing " . a:cmd . " anyway."
-      endif
-      " Fall through and continue
-    endif
-  endif
+  " if len(s:BufKillWindowListWithBufferLoaded) > 1 && strlen(a:bang) == 0
+  "   if g:BufKillActionWhenBufferDisplayedInAnotherWindow =~ '[Cc][Aa][Nn][Cc][Ee][Ll]'
+  "     if g:BufKillVerbose
+  "       echom "Buffer '" . bufname(s:BufKillBufferToKill) . "' displayed in multiple windows - " . a:cmd . " cancelled (add ! to kill anywawy, or set g:BufKillActionWhenBufferDisplayedInAnotherWindow to 'confirm' or 'kill')"
+  "     endif
+  "     return
+  "   elseif g:BufKillActionWhenBufferDisplayedInAnotherWindow =~ '[Cc][Oo][Nn][Ff][Ii][Rr][Mm]'
+  "     let choice = confirm("Buffer '" . bufname(s:BufKillBufferToKill) . "' displayed in multiple windows - " . a:cmd . " it anyway?", "&Yes\n&No", 1)
+  "     if choice != 1
+  "       return
+  "     endif
+  "   elseif g:BufKillActionWhenBufferDisplayedInAnotherWindow =~ '[Rr][Ee][Mm][Oo][Vv][Ee]'
+  "     if g:BufKillVerbose
+  "       echom "Buffer '" . bufname(s:BufKillBufferToKill) . "' displayed in multiple windows - executing " . a:cmd . " anyway."
+  "     endif
+  "     " Fall through and continue
+  "   endif
+  " endif
 
   " For each window that the file is loaded in, go to the previous buffer from its list
   let i = 0
